@@ -1,0 +1,40 @@
+
+var config = {
+    apiKey: "AIzaSyCSUN6iiPIThHGe4GwNvFERBoGhaIGRxwA",
+    authDomain: "resume-669a4.firebaseapp.com",
+    databaseURL: "https://resume-669a4.firebaseio.com",
+    projectId: "resume-669a4",
+    storageBucket: "resume-669a4.appspot.com",
+    messagingSenderId: "459172865572"
+};
+
+firebase.initializeApp(config);
+
+var storageRef = firebase.storage().ref();
+
+submit.addEventListener('click', function() {
+  var name = document.getElementById('name');
+  var posts = document.getElementById('posts');
+  var submit = document.getElementById('submit');
+  var user = name.value;
+  var words = posts.value;
+  var filename = "";
+  for (i = 0; i < 10; i++) {
+      if (words[i]) {
+        fileName += words[i];
+      }
+   }
+  var uploadTask = storageRef.child('posts/' + user + words + '.txt');
+  uploadTask.putString(words).then(function(snapshot) {
+    console.log('留言已送出!');
+    console.log(uploadTask);
+    uploadTask.getDownloadURL().then(function(url) {
+      console.log('網址在： ', url);
+      document.getElementById('demo').innerHTML = "網址在： " + url;
+    });
+  }, function(err) {
+      var errCode = err.code;
+      var errMessage = err.message;
+      console.log(errCode + errMessage);
+  });
+}, false);
